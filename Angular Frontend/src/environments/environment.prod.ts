@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  //_api:'https://weather-tawny-eta.vercel.app'
-  _api:'http://localhost:5000'
+  _api:'https://weather-1zq1.vercel.app'
+  //_api:'http://localhost:5000'
 };
