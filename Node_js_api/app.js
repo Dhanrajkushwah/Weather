@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // Define the route for fetching weather data
-app.use('/api/user/weather', weatherRoute);
+app.use('/api/user', weatherRoute);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

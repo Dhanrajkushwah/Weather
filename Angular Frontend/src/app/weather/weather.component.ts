@@ -9,6 +9,7 @@ import { WeatherService } from '../weather.service';
 export class WeatherComponent {
   city: string = '';
   weatherData: any;
+  forecastData: any[] = []; // To store forecast data
   weatherIcon: string = '';
   backgroundImage: string = '';
   weatherImage: string = '';
@@ -20,6 +21,7 @@ export class WeatherComponent {
       (data) => {
         this.weatherData = data;
         this.setWeatherIconAndImage(this.weatherData.weather[0].main);
+        this.getForecast(); // Call method to get the forecast data
       },
       (error) => {
         console.error('Error fetching weather data:', error);
@@ -27,8 +29,25 @@ export class WeatherComponent {
       }
     );
   }
-  
 
+  getForecast() {
+    this.weatherService.getForecast(this.city).subscribe(
+      (data) => {
+        this.forecastData = data.list.map((item: any) => ({
+          date: item.dt * 1000, // Convert to milliseconds for date
+          temp: {
+            day: item.main.temp // Ensure this path is correct based on your API response
+          },
+          weather: item.weather
+        }));
+        
+      },
+      (error) => {
+        console.error('Error fetching forecast data:', error);
+      }
+    );
+  }
+  
   getFormattedTime(unixTimestamp: number): string {
     const date = new Date(unixTimestamp * 1000);
     const hours = date.getHours();
@@ -66,5 +85,18 @@ export class WeatherComponent {
     }
   }
 
-  
+  getWeatherIcon(condition: string) {
+    switch (condition.toLowerCase()) {
+      case 'clear':
+        return 'fas fa-sun';
+      case 'clouds':
+        return 'fas fa-cloud';
+      case 'rain':
+        return 'fas fa-cloud-rain';
+      case 'snow':
+        return 'fas fa-snowflake';
+      default:
+        return 'fas fa-question-circle';
+    }
+  }
 }
